@@ -1,4 +1,4 @@
-package com.antoan.f1app.viewmodels
+package com.antoan.f1app.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

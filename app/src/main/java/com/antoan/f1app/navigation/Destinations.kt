@@ -5,8 +5,8 @@ enum class Destinations(val route: String){
     Home("home"),
     Standings("standings"),
     Drivers("drivers"),
-    DriverInfo("drivers/{id}"),
+    Driver("drivers/{id}"),
     Constructors("constructors"),
-    ConstructorInfo("constructors/{id}"),
-
+    Constructor("constructors/{id}"),
+    Profile("profile")
 }

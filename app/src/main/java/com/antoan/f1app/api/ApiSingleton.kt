@@ -3,6 +3,7 @@ package com.antoan.f1app.api
 
 import com.antoan.f1app.api.interceptors.AuthInterceptor
 import com.antoan.f1app.api.interceptors.ErrorHandlingInterceptor
+import com.antoan.f1app.api.services.BackendApi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

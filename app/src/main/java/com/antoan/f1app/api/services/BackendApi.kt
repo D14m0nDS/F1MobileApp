@@ -1,4 +1,4 @@
-package com.antoan.f1app.api
+package com.antoan.f1app.api.services
 
 import com.antoan.f1app.api.models.Driver
 import retrofit2.Call
