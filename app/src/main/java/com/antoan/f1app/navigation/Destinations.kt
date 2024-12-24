@@ -7,6 +7,5 @@ enum class Destinations(val route: String){
     Drivers("drivers"),
     Driver("drivers/{id}"),
     Constructors("constructors"),
-    Constructor("constructors/{id}"),
-    Profile("profile")
+    Constructor("constructors/{id}")
 }

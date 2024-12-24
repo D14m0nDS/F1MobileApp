@@ -10,6 +10,6 @@ import androidx.compose.material.icons.filled.Group
 enum class BottomNavDestinations(val route: String, val label: String, val icon: ImageVector) {
     Home("home", "Home", Icons.Default.Home),
     Standings("standings", "Standings", Icons.Default.Star),
-    DriversAndTeams("drivers_and_teams", "Teams", Icons.Default.Group),
+    DriversAndTeams("drivers_and_teams", "Lineups", Icons.Default.Group),
     Profile("profile", "Profile", Icons.Default.Person)
 }
