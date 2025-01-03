@@ -1,29 +1,17 @@
 package com.antoan.f1app.ui.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.CreationExtras
 
-class LoginViewModel (application: Application) : AndroidViewModel(application) {
-    private val _loggedIn = MutableLiveData<Boolean>()
+class LoginViewModel(application: Application) : AndroidViewModel(application) {
+    private val preferences = application.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
 
-    fun isLoggedIn() = _loggedIn.value ?: true
+    fun isLoggedIn(): Boolean {
+        return preferences.getBoolean("isLoggedIn", false)
+    }
 
-    companion object {
-        @Suppress("UNCHECKED_CAST")
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(
-                modelClass: Class<T>,
-                extras: CreationExtras
-            ): T {
-                val application = checkNotNull(extras[APPLICATION_KEY])
-
-                return LoginViewModel(application) as T
-            }
-        }
+    fun setLoggedIn(loggedIn: Boolean) {
+        preferences.edit().putBoolean("isLoggedIn", loggedIn).apply()
     }
 }

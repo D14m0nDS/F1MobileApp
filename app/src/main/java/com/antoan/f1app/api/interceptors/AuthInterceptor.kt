@@ -6,7 +6,7 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
-
+// Interceptor for the auth tokens for each request
 class AuthInterceptor(private val tokenProvider: () -> String?) : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {

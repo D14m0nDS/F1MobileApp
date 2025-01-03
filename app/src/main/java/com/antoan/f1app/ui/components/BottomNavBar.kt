@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+// Global navigation bar for the app
 @Composable
 fun BottomNavBar(navController: NavController) {
     val items = listOf(

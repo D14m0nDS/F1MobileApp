@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.io.IOException
 
+// Interceptor for possible errors in the responses from the backend
 class ErrorHandlingInterceptor : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -12,14 +13,13 @@ class ErrorHandlingInterceptor : Interceptor {
 
         when (response.code()) {
             401 -> {
-                // Handle Unauthorized (e.g., navigate to login)
+                // Unauthorized
                 throw IOException("Unauthorized - You may need to log in again.")
             }
             500 -> {
-                // Handle Internal Server Error
+                // Internal Server Error
                 throw IOException("Server is currently unavailable. Please try again later.")
             }
-            // Add more cases as needed
         }
 
         return response

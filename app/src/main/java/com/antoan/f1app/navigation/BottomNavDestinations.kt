@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Group
 
+// All destinations the bottom navigation bar is using
 enum class BottomNavDestinations(val route: String, val label: String, val icon: ImageVector) {
     Home("home", "Home", Icons.Default.Home),
     Standings("standings", "Standings", Icons.Default.Star),

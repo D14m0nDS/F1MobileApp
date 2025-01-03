@@ -9,9 +9,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.antoan.f1app.api.apiSingleton
 import com.antoan.f1app.navigation.AppNavigation
 import com.antoan.f1app.ui.theme.F1AppTheme
 import com.antoan.f1app.ui.viewmodels.ThemeViewModel
+import com.antoan.f1app.ui.viewmodels.factory.GenericViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +23,11 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            val themeViewModel: ThemeViewModel = viewModel()
+            val api = apiSingleton().backendApi
+            val themeViewModel: ThemeViewModel = viewModel(factory = GenericViewModelFactory {
+                ThemeViewModel()
+            })
+
             F1AppTheme(
                 darkTheme = themeViewModel.isDarkTheme.value
             ) {
@@ -29,7 +35,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavigation(themeViewModel = themeViewModel)
+                    AppNavigation(
+                        themeViewModel = themeViewModel,
+                        api = api
+                    )
                 }
             }
         }

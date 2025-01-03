@@ -23,8 +23,12 @@ import com.antoan.f1app.ui.screens.ProfileScreen
 import com.antoan.f1app.ui.screens.StandingsScreen
 import com.antoan.f1app.ui.viewmodels.ConstructorScreenViewModel
 import com.antoan.f1app.ui.viewmodels.DriverScreenViewModel
-import com.antoan.f1app.ui.viewmodels.LoginViewModel
 import com.antoan.f1app.ui.viewmodels.ThemeViewModel
+import com.antoan.f1app.api.repositories.ConstructorsRepository
+import com.antoan.f1app.api.services.BackendApi
+import com.antoan.f1app.ui.viewmodels.AllConstructorsViewModel
+import com.antoan.f1app.ui.viewmodels.LoginViewModel
+import com.antoan.f1app.ui.viewmodels.factory.GenericViewModelFactory
 
 // App navigation through all screens
 @Composable
@@ -32,14 +36,17 @@ fun AppNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     themeViewModel: ThemeViewModel,
-    loginViewModel: LoginViewModel = viewModel(factory = LoginViewModel.Factory),
+    api: BackendApi
 ) {
+    //A box filling the screen, for cleaner look
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
+        val loginViewModel: LoginViewModel = viewModel(factory = GenericViewModelFactory { LoginViewModel() })
         val isLoggedIn = loginViewModel.isLoggedIn()
         val startDestination = if (isLoggedIn) Destinations.Home.route else Destinations.Login.route
 
+        // Scaffold, containing the navigation bar and the current screen
         Scaffold(
             bottomBar = {
                 if(isLoggedIn) BottomNavBar(navController)
@@ -60,42 +67,62 @@ fun AppNavigation(
                 }
 
                 // Home Screen
-                composable(route = Destinations.Home.route) { HomeScreen() }
+                composable(route = Destinations.Home.route) {
+                    HomeScreen()
+                }
 
                 // Drivers and constructors list
                 composable(route = BottomNavDestinations.DriversAndTeams.route) {
-                    DriversAndTeamsScreen(onNavigateToDrivers = {
+                    DriversAndTeamsScreen(
+                        onNavigateToDrivers = {
                         navController.navigate(Destinations.Drivers.route)
-                    }, onNavigateToConstructors = {
+                    },
+                        onNavigateToConstructors = {
                         navController.navigate(Destinations.Constructors.route)
                     })
                 }
 
                 // Current standings in the season
-                composable(route = Destinations.Standings.route) { StandingsScreen() }
-
-                // Driver info
-                composable(route = Destinations.Driver.route) { backStackEntry ->
-                    val driverId = backStackEntry.arguments?.getString("id") ?: "Null"
-                    val viewModel: DriverScreenViewModel = viewModel()
-                    DriverScreen(viewModel = viewModel,driverId = driverId)
+                composable(route = Destinations.Standings.route) {
+                    StandingsScreen()
                 }
 
-                // Constructor info
+                // Driver details
+                composable(route = Destinations.Driver.route) { backStackEntry ->
+                    val driverId = backStackEntry.arguments?.getString("id") ?: "Null"
+                    val driverViewModel: DriverScreenViewModel = viewModel(factory = GenericViewModelFactory {
+                        DriverScreenViewModel()
+                    })
+                    DriverScreen(viewModel = driverViewModel,driverId = driverId)
+                }
+
+                // Constructor details
                 composable(route = Destinations.Constructor.route) { backStackEntry ->
                     val constructorId = backStackEntry.arguments?.getString("id") ?: "Null"
-                    val viewModel: ConstructorScreenViewModel = viewModel()
-                    ConstructorScreen(viewModel = viewModel,constructorId = constructorId)
+                    val constructorViewModel: ConstructorScreenViewModel = viewModel(factory = GenericViewModelFactory {
+                        ConstructorScreenViewModel()
+                    })
+                    ConstructorScreen(viewModel = constructorViewModel,constructorId = constructorId)
                 }
 
                 // User profile
-                composable(route = BottomNavDestinations.Profile.route) { ProfileScreen(themeViewModel)}
+                composable(route = BottomNavDestinations.Profile.route) {
+                    ProfileScreen(themeViewModel)
+                }
 
                 // All drivers list, redirected from DriversAndTeamsScreen()
-                composable(route = Destinations.Drivers.route) { AllDriversScreen() }
+                composable(route = Destinations.Drivers.route) {
+                    AllDriversScreen()
+                }
 
                 // All constructors list, redirected from DriversAndTeamsScreen()
-                composable(route = Destinations.Constructors.route) { AllConstructorsScreen() }
+                composable(route = Destinations.Constructors.route) {
+                    val constructorsRepository = DependencyProvider.constructorsRepository
+                    val viewModel: AllConstructorsViewModel = viewModel(factory = GenericViewModelFactory {
+                        AllConstructorsViewModel(constructorsRepository)
+                    })
+                    AllConstructorsScreen(viewModel)
+                }
             }
 
         }
