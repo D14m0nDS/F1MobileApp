@@ -9,7 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.antoan.f1app.api.apiSingleton
+import com.antoan.f1app.api.ApiSingleton
 import com.antoan.f1app.navigation.AppNavigation
 import com.antoan.f1app.ui.theme.F1AppTheme
 import com.antoan.f1app.ui.viewmodels.ThemeViewModel
@@ -23,9 +23,10 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            val api = apiSingleton().backendApi
+            val api = ApiSingleton().backendApi
+
             val themeViewModel: ThemeViewModel = viewModel(factory = GenericViewModelFactory {
-                ThemeViewModel()
+                ThemeViewModel(applicationContext)
             })
 
             F1AppTheme(
@@ -37,7 +38,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     AppNavigation(
                         themeViewModel = themeViewModel,
-                        api = api
+                        api = api,
+                        application = application
                     )
                 }
             }

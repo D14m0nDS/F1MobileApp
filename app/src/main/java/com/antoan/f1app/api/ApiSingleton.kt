@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class apiSingleton {
+class ApiSingleton {
     val client = OkHttpClient.Builder()
         .addInterceptor(AuthInterceptor {
             // Get the token
@@ -19,7 +19,7 @@ class apiSingleton {
 
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("")
+        .baseUrl("https://your-backend-api.com/")
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()

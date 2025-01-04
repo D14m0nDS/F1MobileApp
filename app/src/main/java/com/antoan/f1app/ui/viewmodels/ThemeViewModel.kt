@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
 // View model to track the selected theme from user
-class ThemeViewModel : ViewModel() {
+class ThemeViewModel(context: Context) : ViewModel() {
     private val sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
     val isDarkTheme = mutableStateOf(sharedPreferences.getBoolean("isDarkTheme", false))
 

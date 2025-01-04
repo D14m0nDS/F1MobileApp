@@ -8,7 +8,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val preferences = application.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
 
     fun isLoggedIn(): Boolean {
-        return preferences.getBoolean("isLoggedIn", false)
+        return preferences.getBoolean("isLoggedIn", true)
     }
 
     fun setLoggedIn(loggedIn: Boolean) {

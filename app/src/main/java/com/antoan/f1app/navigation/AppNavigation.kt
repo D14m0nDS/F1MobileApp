@@ -1,5 +1,6 @@
 package com.antoan.f1app.navigation
 
+import android.app.Application
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -36,13 +37,14 @@ fun AppNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     themeViewModel: ThemeViewModel,
-    api: BackendApi
+    api: BackendApi,
+    application: Application
 ) {
     //A box filling the screen, for cleaner look
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        val loginViewModel: LoginViewModel = viewModel(factory = GenericViewModelFactory { LoginViewModel() })
+        val loginViewModel: LoginViewModel = viewModel(factory = GenericViewModelFactory { LoginViewModel(application) })
         val isLoggedIn = loginViewModel.isLoggedIn()
         val startDestination = if (isLoggedIn) Destinations.Home.route else Destinations.Login.route
 
@@ -116,16 +118,14 @@ fun AppNavigation(
                 }
 
                 // All constructors list, redirected from DriversAndTeamsScreen()
-                composable(route = Destinations.Constructors.route) {
-                    val constructorsRepository = DependencyProvider.constructorsRepository
+               composable(route = Destinations.Constructors.route) {
+                    val constructorsRepository = ConstructorsRepository(api)
                     val viewModel: AllConstructorsViewModel = viewModel(factory = GenericViewModelFactory {
                         AllConstructorsViewModel(constructorsRepository)
                     })
                     AllConstructorsScreen(viewModel)
                 }
             }
-
         }
     }
-
 }
