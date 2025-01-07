@@ -1,6 +1,5 @@
 package com.antoan.f1app.navigation
 
-import android.app.Application
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.antoan.f1app.ui.components.BottomNavBar
+import com.antoan.f1app.ui.components.TopNavBar
 import com.antoan.f1app.ui.screens.AllConstructorsScreen
 import com.antoan.f1app.ui.screens.AllDriversScreen
 import com.antoan.f1app.ui.screens.ConstructorScreen
@@ -27,11 +27,9 @@ import com.antoan.f1app.ui.screens.StandingsScreen
 import com.antoan.f1app.ui.viewmodels.ConstructorScreenViewModel
 import com.antoan.f1app.ui.viewmodels.DriverScreenViewModel
 import com.antoan.f1app.ui.viewmodels.ThemeViewModel
-import com.antoan.f1app.api.repositories.ConstructorsRepository
-import com.antoan.f1app.api.services.BackendApi
 import com.antoan.f1app.ui.viewmodels.AllConstructorsViewModel
+import com.antoan.f1app.ui.viewmodels.AllDriversViewModel
 import com.antoan.f1app.ui.viewmodels.LoginViewModel
-import com.antoan.f1app.ui.viewmodels.factory.GenericViewModelFactory
 
 // App navigation through all screens
 @Composable
@@ -82,11 +80,17 @@ fun AppNavigation(
                 composable(route = BottomNavDestinations.DriversAndTeams.route) {
                     DriversAndTeamsScreen(
                         onNavigateToDrivers = {
-                        navController.navigate(Destinations.Drivers.route)
-                    },
+                            navController.navigate(Destinations.Drivers.route)
+                        },
                         onNavigateToConstructors = {
-                        navController.navigate(Destinations.Constructors.route)
-                    })
+                            navController.navigate(Destinations.Constructors.route)
+                        }
+                    )
+//                    LaunchedEffect(Unit) {
+//                        navController.navigate(BottomNavDestinations.DriversAndTeams.route) {
+//                            popUpTo(navController.graph.startDestinationId) { inclusive = false }
+//                        }
+//                    }
                 }
 
                 // Current standings in the season
@@ -97,18 +101,15 @@ fun AppNavigation(
                 // Driver details
                 composable(route = Destinations.Driver.route) { backStackEntry ->
                     val driverId = backStackEntry.arguments?.getString("id") ?: "Null"
-                    val driverViewModel: DriverScreenViewModel = viewModel(factory = GenericViewModelFactory {
-                        DriverScreenViewModel()
-                    })
+                    val driverViewModel: DriverScreenViewModel = hiltViewModel()
                     DriverScreen(viewModel = driverViewModel,driverId = driverId)
                 }
 
                 // Constructor details
                 composable(route = Destinations.Constructor.route) { backStackEntry ->
                     val constructorId = backStackEntry.arguments?.getString("id") ?: "Null"
-                    val constructorViewModel: ConstructorScreenViewModel = viewModel(factory = GenericViewModelFactory {
-                        ConstructorScreenViewModel()
-                    })
+                    val constructorViewModel: ConstructorScreenViewModel = hiltViewModel()
+
                     ConstructorScreen(viewModel = constructorViewModel,constructorId = constructorId)
                 }
 
@@ -119,17 +120,15 @@ fun AppNavigation(
 
                 // All drivers list, redirected from DriversAndTeamsScreen()
                 composable(route = Destinations.Drivers.route) {
-                    AllDriversScreen()
+                    val allDriversViewModel: AllDriversViewModel = hiltViewModel()
+                    AllDriversScreen(allDriversViewModel, navController)
                 }
 
                 // All constructors list, redirected from DriversAndTeamsScreen()
-//               composable(route = Destinations.Constructors.route) {
-//                    val constructorsRepository = ConstructorsRepository(api)
-//                    val viewModel: AllConstructorsViewModel = viewModel(factory = GenericViewModelFactory {
-//                        AllConstructorsViewModel(constructorsRepository)
-//                    })
-//                    AllConstructorsScreen(viewModel)
-//               }
+               composable(route = Destinations.Constructors.route) {
+                    val allConstructorsViewModel: AllConstructorsViewModel = hiltViewModel()
+                    AllConstructorsScreen(allConstructorsViewModel, navController)
+               }
             }
         }
     }

@@ -24,8 +24,6 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            val api = ApiSingleton().backendApi
-
             val themeViewModel: ThemeViewModel = hiltViewModel()
 
             F1AppTheme(

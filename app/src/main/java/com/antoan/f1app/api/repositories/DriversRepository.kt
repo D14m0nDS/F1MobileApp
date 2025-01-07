@@ -4,15 +4,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+class DriversRepository @Inject constructor() {
 
-class ConstructorsRepository @Inject constructor(
-) {
-    suspend fun getAllConstructors(): List<String> {
+    suspend fun getAllDrivers(): List<String> {
         return withContext(Dispatchers.IO) {
             // Replace with actual API call when backend is ready
             try {
                 // Simulated API call
-                listOf("Red Bull Racing", "Mercedes AMG", "Ferrari", "McLaren")
+                listOf("Lando Norris", "Max Verstappen", "Lewis Hamilton", "George Russel")
             } catch (e: Exception) {
                 emptyList()
             }
