@@ -7,14 +7,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.antoan.f1app.api.ApiSingleton
 import com.antoan.f1app.navigation.AppNavigation
 import com.antoan.f1app.ui.theme.F1AppTheme
 import com.antoan.f1app.ui.viewmodels.ThemeViewModel
-import com.antoan.f1app.ui.viewmodels.factory.GenericViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,9 +26,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val api = ApiSingleton().backendApi
 
-            val themeViewModel: ThemeViewModel = viewModel(factory = GenericViewModelFactory {
-                ThemeViewModel(applicationContext)
-            })
+            val themeViewModel: ThemeViewModel = hiltViewModel()
 
             F1AppTheme(
                 darkTheme = themeViewModel.isDarkTheme.value
@@ -36,11 +35,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavigation(
-                        themeViewModel = themeViewModel,
-                        api = api,
-                        application = application
-                    )
+                    AppNavigation()
                 }
             }
         }

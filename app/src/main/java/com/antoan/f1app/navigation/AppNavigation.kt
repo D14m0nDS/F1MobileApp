@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -36,16 +38,14 @@ import com.antoan.f1app.ui.viewmodels.factory.GenericViewModelFactory
 fun AppNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    themeViewModel: ThemeViewModel,
-    api: BackendApi,
-    application: Application
 ) {
+    val themeViewModel: ThemeViewModel = hiltViewModel()
+    val loginViewModel: LoginViewModel = hiltViewModel()
     //A box filling the screen, for cleaner look
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        val loginViewModel: LoginViewModel = viewModel(factory = GenericViewModelFactory { LoginViewModel(application) })
-        val isLoggedIn = loginViewModel.isLoggedIn()
+        val isLoggedIn = loginViewModel.isLoggedIn.value
         val startDestination = if (isLoggedIn) Destinations.Home.route else Destinations.Login.route
 
         // Scaffold, containing the navigation bar and the current screen
@@ -61,13 +61,18 @@ fun AppNavigation(
             ) {
                 // Login screen
                 composable(route = Destinations.Login.route) {
-                    LoginScreen(onLoginSuccess = {
-                        navController.navigate(Destinations.Home.route) {
-                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
-                        }
-                    })
-                }
 
+                    LoginScreen(loginViewModel)
+
+                    LaunchedEffect(isLoggedIn) {
+                        if (isLoggedIn) {
+                            navController.navigate(Destinations.Home.route) {
+                                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                            }
+                        }
+                    }
+                }
+                
                 // Home Screen
                 composable(route = Destinations.Home.route) {
                     HomeScreen()
@@ -118,13 +123,13 @@ fun AppNavigation(
                 }
 
                 // All constructors list, redirected from DriversAndTeamsScreen()
-               composable(route = Destinations.Constructors.route) {
-                    val constructorsRepository = ConstructorsRepository(api)
-                    val viewModel: AllConstructorsViewModel = viewModel(factory = GenericViewModelFactory {
-                        AllConstructorsViewModel(constructorsRepository)
-                    })
-                    AllConstructorsScreen(viewModel)
-                }
+//               composable(route = Destinations.Constructors.route) {
+//                    val constructorsRepository = ConstructorsRepository(api)
+//                    val viewModel: AllConstructorsViewModel = viewModel(factory = GenericViewModelFactory {
+//                        AllConstructorsViewModel(constructorsRepository)
+//                    })
+//                    AllConstructorsScreen(viewModel)
+//               }
             }
         }
     }
