@@ -15,10 +15,16 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.antoan.f1app.navigation.BottomNavDestinations
 import androidx.compose.material3.NavigationBar
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 // Global navigation bar for the app
 @Composable
@@ -37,6 +43,8 @@ fun BottomNavBar(navController: NavController) {
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
+        val coroutineScope = rememberCoroutineScope()
+        var isNavigating by rememberSaveable { mutableStateOf(false) }
 
         items.forEach { destination ->
             Box(
@@ -46,15 +54,20 @@ fun BottomNavBar(navController: NavController) {
                     .background(
                         if (currentRoute == destination.route) Color.Gray.copy(alpha = 0.3f) else Color.Transparent
                     )
-                    .clickable(onClick = {
-                        if (currentRoute != destination.route) {
-                            navController.navigate(destination.route) {
-                                popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                launchSingleTop = true
-                                restoreState = true
+                    .clickable(enabled = !isNavigating) {
+                        if (!isNavigating) {
+                            isNavigating = true
+                            coroutineScope.launch {
+                                navController.navigate(destination.route) {
+                                    popUpTo(destination.route) { inclusive = true }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                                delay(250L)
+                                isNavigating = false
                             }
                         }
-                    }),
+                    },
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {

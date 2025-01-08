@@ -30,6 +30,7 @@ import com.antoan.f1app.ui.viewmodels.ThemeViewModel
 import com.antoan.f1app.ui.viewmodels.AllConstructorsViewModel
 import com.antoan.f1app.ui.viewmodels.AllDriversViewModel
 import com.antoan.f1app.ui.viewmodels.LoginViewModel
+import com.antoan.f1app.ui.viewmodels.StandingsViewModel
 
 // App navigation through all screens
 @Composable
@@ -86,23 +87,19 @@ fun AppNavigation(
                             navController.navigate(Destinations.Constructors.route)
                         }
                     )
-//                    LaunchedEffect(Unit) {
-//                        navController.navigate(BottomNavDestinations.DriversAndTeams.route) {
-//                            popUpTo(navController.graph.startDestinationId) { inclusive = false }
-//                        }
-//                    }
                 }
 
                 // Current standings in the season
                 composable(route = Destinations.Standings.route) {
-                    StandingsScreen()
+                    val standingsViewModel : StandingsViewModel = hiltViewModel()
+                    StandingsScreen(standingsViewModel)
                 }
 
                 // Driver details
                 composable(route = Destinations.Driver.route) { backStackEntry ->
                     val driverId = backStackEntry.arguments?.getString("id") ?: "Null"
                     val driverViewModel: DriverScreenViewModel = hiltViewModel()
-                    DriverScreen(viewModel = driverViewModel,driverId = driverId)
+                    DriverScreen(viewModel = driverViewModel, driverId = driverId)
                 }
 
                 // Constructor details
@@ -110,7 +107,7 @@ fun AppNavigation(
                     val constructorId = backStackEntry.arguments?.getString("id") ?: "Null"
                     val constructorViewModel: ConstructorScreenViewModel = hiltViewModel()
 
-                    ConstructorScreen(viewModel = constructorViewModel,constructorId = constructorId)
+                    ConstructorScreen(viewModel = constructorViewModel, constructorId = constructorId)
                 }
 
                 // User profile
