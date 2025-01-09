@@ -1,5 +1,5 @@
 package com.antoan.f1app.api.models
 
-data class Race (
+data class RaceInfo(
     val name: String
 )

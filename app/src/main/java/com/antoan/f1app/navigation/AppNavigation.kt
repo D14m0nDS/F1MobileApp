@@ -29,6 +29,7 @@ import com.antoan.f1app.ui.viewmodels.DriverScreenViewModel
 import com.antoan.f1app.ui.viewmodels.ThemeViewModel
 import com.antoan.f1app.ui.viewmodels.AllConstructorsViewModel
 import com.antoan.f1app.ui.viewmodels.AllDriversViewModel
+import com.antoan.f1app.ui.viewmodels.HomeScreenViewModel
 import com.antoan.f1app.ui.viewmodels.LoginViewModel
 import com.antoan.f1app.ui.viewmodels.StandingsViewModel
 
@@ -74,7 +75,8 @@ fun AppNavigation(
                 
                 // Home Screen
                 composable(route = Destinations.Home.route) {
-                    HomeScreen()
+                    val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
+                    HomeScreen(homeScreenViewModel)
                 }
 
                 // Drivers and constructors list
