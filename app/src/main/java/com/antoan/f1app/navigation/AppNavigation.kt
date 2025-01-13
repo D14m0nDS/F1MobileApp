@@ -8,13 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.antoan.f1app.ui.components.BottomNavBar
-import com.antoan.f1app.ui.components.TopNavBar
 import com.antoan.f1app.ui.screens.AllConstructorsScreen
 import com.antoan.f1app.ui.screens.AllDriversScreen
 import com.antoan.f1app.ui.screens.ConstructorScreen

@@ -2,6 +2,7 @@ package com.antoan.f1app.ui.screens
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.antoan.f1app.R
 import com.antoan.f1app.ui.viewmodels.ConstructorScreenViewModel
 
 @Composable
@@ -20,5 +21,4 @@ fun ConstructorErrorScreen(message: String) {
 
 @Composable
 fun ConstructorContent(constructorId: String) {
-
 }
