@@ -15,4 +15,6 @@ interface BackendApi {
     fun getDriverInfo(
         @Path("id") id: Int,
     ): Call<Driver>
+    @GET("f1/schedule")
+    suspend fun testEndpoint(): String
 }

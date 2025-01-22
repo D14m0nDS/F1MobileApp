@@ -39,7 +39,7 @@ fun DriversAndTeamsScreen(
 
             // Background Image
             Image(
-                painter = painterResource(id = R.drawable.drivers_button_background),
+                painter = painterResource(id = R.mipmap.drivers_button_background),
                 contentDescription = "Drivers Background",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
@@ -72,7 +72,7 @@ fun DriversAndTeamsScreen(
 
             // Background Image
             Image(
-                painter = painterResource(id = R.drawable.constructors_button_background),
+                painter = painterResource(id = R.mipmap.constructors_button_background),
                 contentDescription = "Constructors Background",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
