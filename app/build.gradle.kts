@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.security.crypto)
     testImplementation(libs.junit)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)

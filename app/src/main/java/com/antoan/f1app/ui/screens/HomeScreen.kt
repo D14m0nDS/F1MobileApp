@@ -15,10 +15,10 @@ import com.antoan.f1app.ui.viewmodels.HomeScreenViewModel
 fun HomeScreen(
     viewModel: HomeScreenViewModel
 ) {
-    val races by viewModel.races.collectAsState()
+    val schedule by viewModel.races.collectAsState()
 
     LazyColumn {
-        items(races) { race ->
+        items(schedule.races) { race ->
             Text(
                 text = race.name,
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp)

@@ -1,28 +1,33 @@
 package com.antoan.f1app.api.repositories
 
+import com.antoan.f1app.api.ApiSingleton
 import com.antoan.f1app.api.models.Race
-import com.antoan.f1app.api.models.RaceInfo
+import com.antoan.f1app.api.models.Schedule
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RacesRepository @Inject constructor(
+    private val apiSingleton: ApiSingleton
 ){
-    suspend fun getAllRaces(): List<Race> {
+    suspend fun getAllRaces(): Schedule {
         return withContext(Dispatchers.IO) {
+            apiSingleton.isInitialized.first { it }
+
             try {
-                listOf(Race("Silverstone"), Race("Miami"), Race("Monaco"))
+                apiSingleton.getF1Api().getSchedule()
             } catch (e: Exception) {
-                emptyList()
+                Schedule(0, emptyList())
             }
         }
     }
-    suspend fun getRaceInfo(): RaceInfo {
+    suspend fun getRaceInfo(): Race {
         return withContext(Dispatchers.IO) {
             try {
-                RaceInfo("Monaco")
+                apiSingleton.getF1Api().getRace()
             } catch (e: Exception) {
-                RaceInfo("")
+                Race("")
             }
         }
     }

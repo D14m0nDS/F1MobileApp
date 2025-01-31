@@ -2,7 +2,8 @@ package com.antoan.f1app.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.antoan.f1app.api.models.RaceInfo
+import com.antoan.f1app.api.models.Circuit
+import com.antoan.f1app.api.models.Race
 import com.antoan.f1app.api.repositories.RacesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,7 @@ import javax.inject.Inject
 class RaceInfoViewModel @Inject constructor(
     private val repository: RacesRepository
 ) : ViewModel() {
-    private val _raceInfo = MutableStateFlow<RaceInfo>(RaceInfo(""))
+    private val _raceInfo = MutableStateFlow<Race>(Race())
     val raceInfo: StateFlow<RaceInfo> = _raceInfo
 
     init {

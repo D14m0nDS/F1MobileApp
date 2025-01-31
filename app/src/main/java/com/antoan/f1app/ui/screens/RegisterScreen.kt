@@ -22,12 +22,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.antoan.f1app.navigation.Destinations
 import com.antoan.f1app.ui.viewmodels.AuthViewModel
 
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     navController: NavHostController,
     viewModel: AuthViewModel
 ) {
@@ -40,6 +39,14 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        TextField(
+            value = state.username,
+            onValueChange = { state.username = it },
+            label = { Text("Username") }
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         TextField(
             value = state.email,
             onValueChange = { state.email = it },
@@ -57,21 +64,31 @@ fun LoginScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextField(
+            value = state.passwordConfirmation,
+            onValueChange = { state.passwordConfirmation = it },
+            label = { Text("Confirm Password") },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+        )
+
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { state.login() },
+            onClick = { state.register() },
             enabled = !state.isLoading
         ) {
             if (state.isLoading) {
                 CircularProgressIndicator(color = Color.White)
             } else {
-                Text("Login")
+                Text("Register")
             }
         }
 
-        TextButton(onClick = { navController.navigate(Destinations.Register.route) }) {
-            Text("Don't have an account? Register")
+        TextButton(onClick = { navController.popBackStack() }) {
+            Text("Already have an account? Login")
         }
 
         state.error?.let { error ->

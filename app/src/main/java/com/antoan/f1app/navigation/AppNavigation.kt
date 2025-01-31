@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -21,14 +21,15 @@ import com.antoan.f1app.ui.screens.DriversAndTeamsScreen
 import com.antoan.f1app.ui.screens.HomeScreen
 import com.antoan.f1app.ui.screens.LoginScreen
 import com.antoan.f1app.ui.screens.ProfileScreen
+import com.antoan.f1app.ui.screens.RegisterScreen
 import com.antoan.f1app.ui.screens.StandingsScreen
 import com.antoan.f1app.ui.viewmodels.ConstructorScreenViewModel
 import com.antoan.f1app.ui.viewmodels.DriverScreenViewModel
 import com.antoan.f1app.ui.viewmodels.ThemeViewModel
 import com.antoan.f1app.ui.viewmodels.AllConstructorsViewModel
 import com.antoan.f1app.ui.viewmodels.AllDriversViewModel
+import com.antoan.f1app.ui.viewmodels.AuthViewModel
 import com.antoan.f1app.ui.viewmodels.HomeScreenViewModel
-import com.antoan.f1app.ui.viewmodels.LoginViewModel
 import com.antoan.f1app.ui.viewmodels.StandingsViewModel
 
 // App navigation through all screens
@@ -38,12 +39,12 @@ fun AppNavigation(
     navController: NavHostController = rememberNavController(),
 ) {
     val themeViewModel: ThemeViewModel = hiltViewModel()
-    val loginViewModel: LoginViewModel = hiltViewModel()
+    val authViewModel: AuthViewModel = hiltViewModel() // We need to change this to someting like authViewModel
+    val isLoggedIn = authViewModel.isLoggedIn.value
     //A box filling the screen, for cleaner look
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        val isLoggedIn = loginViewModel.isLoggedIn.value
         val startDestination = if (isLoggedIn) Destinations.Home.route else Destinations.Login.route
 
         // Scaffold, containing the navigation bar and the current screen
@@ -59,16 +60,12 @@ fun AppNavigation(
             ) {
                 // Login screen
                 composable(route = Destinations.Login.route) {
+                    LoginScreen(navController, authViewModel)
+                }
 
-                    LoginScreen(loginViewModel)
-
-                    LaunchedEffect(isLoggedIn) {
-                        if (isLoggedIn) {
-                            navController.navigate(Destinations.Home.route) {
-                                popUpTo(navController.graph.startDestinationId) { inclusive = true }
-                            }
-                        }
-                    }
+                //Register screen
+                composable(route = Destinations.Register.route) {
+                    RegisterScreen(navController, authViewModel)
                 }
                 
                 // Home Screen
@@ -112,7 +109,7 @@ fun AppNavigation(
 
                 // User profile
                 composable(route = BottomNavDestinations.Profile.route) {
-                    ProfileScreen(themeViewModel)
+                    ProfileScreen(themeViewModel, authViewModel)
                 }
 
                 // All drivers list, redirected from DriversAndTeamsScreen()
