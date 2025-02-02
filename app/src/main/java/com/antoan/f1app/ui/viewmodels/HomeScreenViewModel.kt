@@ -2,7 +2,6 @@ package com.antoan.f1app.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.antoan.f1app.api.models.Race
 import com.antoan.f1app.api.models.Schedule
 import com.antoan.f1app.api.repositories.RacesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,16 +15,26 @@ class HomeScreenViewModel @Inject constructor(
     private val repository: RacesRepository
 
 ) : ViewModel() {
-    private val _races = MutableStateFlow<Schedule>(Schedule(0, emptyList()))
-    val races: StateFlow<Schedule> = _races
+    private val _schedule = MutableStateFlow<Schedule>(Schedule(0, emptyList()))
+    val schedule: StateFlow<Schedule> = _schedule
+
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
-        loadRaces()
+        loadSchedule()
     }
 
-    private fun loadRaces() {
+    private fun loadSchedule() {
         viewModelScope.launch {
-            _races.value = repository.getAllRaces()
+            _isLoading.value = true
+            try {
+                _schedule.value = repository.getSchedule()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 }

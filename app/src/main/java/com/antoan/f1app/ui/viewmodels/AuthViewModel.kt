@@ -34,7 +34,7 @@ class AuthViewModel @Inject constructor(
             try {
                 isLoading = true
                 error = null
-                val response = api.authApi.login(
+                val response = api.getAuthApi().login(
                     LoginRequest(
                         email = email.trim(),
                         password = password.trim()
@@ -59,7 +59,7 @@ class AuthViewModel @Inject constructor(
 
                 isLoading = true
                 error = null
-                val response = api.authApi.register(
+                val response = api.getAuthApi().register(
                     RegistrationRequest(
                         username = username.trim(),
                         email = email.trim().lowercase(),

@@ -11,7 +11,7 @@ data class Race (
     val round: Int,
     @SerializedName("name")
     val name: String,
-    @SerializedName("Circuit")
+    @SerializedName("circuit")
     val circuit: Circuit,
     @SerializedName("date")
     val date: String,

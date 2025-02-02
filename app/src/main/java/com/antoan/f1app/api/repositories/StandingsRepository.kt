@@ -1,41 +1,38 @@
 package com.antoan.f1app.api.repositories
 
-import com.antoan.f1app.api.models.Constructor
-import com.antoan.f1app.api.models.Driver
+import com.antoan.f1app.api.ApiSingleton
+import com.antoan.f1app.api.models.ConstructorStandings
+import com.antoan.f1app.api.models.DriverStandings
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class StandingsRepository @Inject constructor(
+    private val apiSingleton: ApiSingleton
 ) {
-    suspend fun getDriverStandings(): List<Driver> {
+    suspend fun getDriverStandings(
+        season: String = "current"
+    ): List<DriverStandings> {
         return withContext(Dispatchers.IO) {
+            apiSingleton.isInitialized.first { it }
+
             try {
-                    emptyList<Driver>()
-//                listOf(Driver(
-//                    name = "Lando Norris",
-//                    points = 100,
-//                    constructor = "McLaren",
-//                    id = 1,
-//                    position = 2,
-//                    podiums = 5,
-//                    raceResults = emptyMap(),
-//                    driverNumber = 4,
-//                    nationality = TODO(),
-//                    dateOfBirth = TODO(),
-//                    wins = TODO()
-//                ), Driver(name = "Max Verstappen", points = 200, constructor = "Red Bull Racing"))
+                apiSingleton.getF1Api().getDriverStandings(season)
             } catch (e: Exception) {
                 emptyList()
             }
         }
     }
 
-    suspend fun getConstructorStandings(): List<Constructor> {
+    suspend fun getConstructorStandings(
+        season: String = "current"
+    ): List<ConstructorStandings> {
         return withContext(Dispatchers.IO) {
+            apiSingleton.isInitialized.first { it }
+
             try {
-                emptyList<Constructor>()
-//                listOf(Constructor(name = "McLaren", points = 100), Constructor(name = "Red Bull Racing", points = 200))
+                apiSingleton.getF1Api().getConstructorStandings(season)
             } catch (e: Exception) {
                 emptyList()
             }

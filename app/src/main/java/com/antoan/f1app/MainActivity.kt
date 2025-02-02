@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                 if (isReady) {
                     setContent {
                         val themeViewModel: ThemeViewModel = hiltViewModel()
-                        F1AppTheme(themeViewModel.isDarkTheme.value) {
+                        F1AppTheme(darkTheme = themeViewModel.isDarkTheme.value, dynamicColor = false) {
                             Surface(Modifier.fillMaxSize()) {
                                 AppNavigation()
                             }

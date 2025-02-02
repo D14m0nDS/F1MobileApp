@@ -34,9 +34,9 @@ fun AllConstructorsScreen(
             contentAlignment = Alignment.TopStart
         ) {
             LazyColumn {
-                items(constructors) { constructor ->
+                items(constructors.size) { index ->
                     Text(
-                        text = constructor,
+                        text = constructors[index].name,
                         modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
                     )
                 }

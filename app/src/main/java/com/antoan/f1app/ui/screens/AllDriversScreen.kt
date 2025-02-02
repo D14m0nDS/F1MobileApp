@@ -37,9 +37,9 @@ fun AllDriversScreen(
             contentAlignment = Alignment.TopStart
         ) {
             LazyColumn {
-                items(drivers) { driver ->
+                items(drivers.size) { index ->
                     Text(
-                        text = driver,
+                        text = drivers[index].name,
                         modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
                     )
                 }

@@ -35,7 +35,7 @@ fun StandingsScreen(
         LazyColumn {
             items(driverStandings) { driver ->
                 Text(
-                    text = driver.name + " " + driver.constructor + " " + driver.points,
+                    text = driver.name + " " + driver.constructorName + " " + driver.points,
                     modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
                 )
             }

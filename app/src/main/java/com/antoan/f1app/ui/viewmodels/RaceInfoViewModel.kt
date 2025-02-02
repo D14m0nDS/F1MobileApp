@@ -15,8 +15,8 @@ import javax.inject.Inject
 class RaceInfoViewModel @Inject constructor(
     private val repository: RacesRepository
 ) : ViewModel() {
-    private val _raceInfo = MutableStateFlow<Race>(Race())
-    val raceInfo: StateFlow<RaceInfo> = _raceInfo
+    private val _race = MutableStateFlow<Race>(Race())
+    val race: StateFlow<Race> = _race
 
     init {
         loadRaceInfo()
@@ -24,7 +24,7 @@ class RaceInfoViewModel @Inject constructor(
 
     private fun loadRaceInfo() {
         viewModelScope.launch {
-            _raceInfo.value = repository.getRaceInfo()
+            _race.value = repository.getRace("2024", 1)
         }
     }
 }
