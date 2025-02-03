@@ -17,7 +17,7 @@ class ThemeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-    val isDarkTheme = mutableStateOf(sharedPreferences.getBoolean("isDarkTheme", false))
+    val isDarkTheme = mutableStateOf(sharedPreferences.getBoolean("isDarkTheme", true))
 
     fun toggleTheme() {
         isDarkTheme.value = !isDarkTheme.value

@@ -21,7 +21,7 @@ class AuthInterceptor @Inject constructor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
 
-        val path = request.url().encodedPath()
+        val path = request.url.encodedPath
         if (path.startsWith("/auth/login") || path.startsWith("/auth/register")) {
             return chain.proceed(request)
         }
@@ -36,7 +36,7 @@ class AuthInterceptor @Inject constructor(
         val response = chain.proceed(authenticatedRequest)
 
         // Handle token expiration (401 Unauthorized)
-        if (response.code() == 401) {
+        if (response.code == 401) {
             synchronized(this) {
                 val newToken = refreshToken(tokenManager.refreshToken)
                 newToken?.let {
@@ -67,7 +67,7 @@ class AuthInterceptor @Inject constructor(
 
     private fun parseToken(response: Response): String? {
         return try {
-            val json = response.body()?.string()
+            val json = response.body?.string()
             val authResponse = Gson().fromJson(json, AuthResponse::class.java)
             authResponse?.accessToken
         } catch (e: Exception) {

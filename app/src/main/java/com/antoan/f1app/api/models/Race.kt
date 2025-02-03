@@ -16,11 +16,13 @@ data class Race (
     @SerializedName("date")
     val date: String,
     @SerializedName("results")
-    val results: List<Result>
+    val results: List<Result>,
+    @SerializedName("image_url")
+    val imageUrl: String
 ) {
     val circuitName: String get() = circuit.name
     val city: String get() = circuit.location.city
     val country: String get() = circuit.location.country
 
-    constructor() : this("", 0, 0, "", Circuit(), "", emptyList())
+    constructor() : this("", 0, 0, "", Circuit(), "", emptyList(), "")
 }

@@ -48,6 +48,7 @@ class ApiSingleton @Inject constructor(
 
     fun getF1Api(): F1Api = retrofit!!.create(F1Api::class.java)
     fun getAuthApi(): AuthApi = retrofit!!.create(AuthApi::class.java)
+    fun getBaseUrl(): String = retrofit!!.baseUrl().toString()
 
 
 

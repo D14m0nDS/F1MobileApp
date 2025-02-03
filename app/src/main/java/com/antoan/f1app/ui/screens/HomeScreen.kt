@@ -1,5 +1,6 @@
 package com.antoan.f1app.ui.screens
 
+import android.content.res.Resources
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,9 +25,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.antoan.f1app.api.ApiSingleton
 import com.antoan.f1app.navigation.Destinations
 import com.antoan.f1app.ui.components.LoadingScreen
 import com.antoan.f1app.ui.viewmodels.HomeScreenViewModel
+import java.text.Normalizer
+import java.util.regex.Pattern
+
+fun String.normalizeToAscii(): String {
+    val normalized = Normalizer.normalize(this, Normalizer.Form.NFD)
+    val pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+")
+    return pattern.matcher(normalized).replaceAll("")
+}
+
+fun getDeviceDpi(): String {
+    val density = Resources.getSystem().displayMetrics.densityDpi
+    return when {
+        density <= 160 -> "mdpi"
+        density <= 240 -> "hdpi"
+        density <= 320 -> "xhdpi"
+        density <= 480 -> "xxhdpi"
+        else -> "xxxhdpi"
+    }
+}
+
 
 @Composable
 fun HomeScreen(
@@ -35,6 +58,8 @@ fun HomeScreen(
 ) {
     val schedule by viewModel.schedule.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val baseUrl = viewModel.baseUrl
+    val dpi = getDeviceDpi()
 
     if (isLoading) {
         LoadingScreen()
@@ -58,20 +83,21 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(schedule.races.size) { index ->
+                        val race = schedule.races[index]
 
-                        val context = LocalContext.current
-                        val circuitImageName = schedule.races[index].circuit.name
+                        val circuitImageName = race.circuit.name
+                            .normalizeToAscii()
                             .lowercase()
                             .replace(" ", "_")
+                            .replace("-", "_")
 
-                        val imageResId = context.resources.getIdentifier(
-                            circuitImageName, "mipmap", context.packageName
-                        )
+                        // Replace letters here
+                        val imageUrl = "$baseUrl/f1/images/${circuitImageName}_$dpi.png"
 
                         Button(
                             onClick = {
                                 val season = schedule.season.toString()
-                                val round = schedule.races[index].round
+                                val round = race.round
                                 navController.navigate(Destinations.Race.createRaceRoute(season, round))
                             },
                             shape = RoundedCornerShape(10),
@@ -87,10 +113,9 @@ fun HomeScreen(
                                     .clip(RoundedCornerShape(10))
 
                             ) {
-                                Image(
-                                    painter = if (imageResId != 0) painterResource(id = imageResId)
-                                    else painterResource(id = com.antoan.f1app.R.mipmap.baku_city_circuit),
-                                    contentDescription = null,
+                                AsyncImage(
+                                    model = imageUrl,
+                                    contentDescription = "Circuit Image",
                                     modifier = Modifier.fillMaxSize(),
                                     contentScale = ContentScale.Crop
                                 )

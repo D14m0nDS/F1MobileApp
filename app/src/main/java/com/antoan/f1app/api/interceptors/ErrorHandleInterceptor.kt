@@ -11,7 +11,7 @@ class ErrorHandlingInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
 
-        when (response.code()) {
+        when (response.code) {
             401 -> {
                 // Unauthorized
                 throw IOException("Unauthorized - You may need to log in again.")
