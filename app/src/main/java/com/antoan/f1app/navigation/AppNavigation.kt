@@ -81,6 +81,7 @@ fun AppNavigation(
                     )
                 }
 
+                // Race info screen
                 composable(
                     route = Destinations.Race.route,
                     arguments = listOf(
@@ -93,7 +94,7 @@ fun AppNavigation(
                     val round = backStackEntry.arguments?.getInt("round") ?: 1
 
                     val raceScreenViewModel: RaceScreenViewModel = hiltViewModel()
-                    RaceScreen(viewModel = raceScreenViewModel, season = season, round = round)
+                    RaceScreen(viewModel = raceScreenViewModel, season = season, round = round, navController = navController)
                 }
                 // Drivers and constructors list
                 composable(route = BottomNavDestinations.DriversAndTeams.route) {

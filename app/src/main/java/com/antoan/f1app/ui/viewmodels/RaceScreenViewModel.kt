@@ -17,9 +17,20 @@ class RaceScreenViewModel @Inject constructor(
     private val _race = MutableStateFlow<Race>(Race())
     val race: StateFlow<Race> = _race
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     fun loadRaceInfo(season: String, round: Int) {
         viewModelScope.launch {
-            _race.value = repository.getRace(season, round)
+            _isLoading.value = true
+            try {
+                _race.value = repository.getRace(season, round)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+
         }
     }
 }
