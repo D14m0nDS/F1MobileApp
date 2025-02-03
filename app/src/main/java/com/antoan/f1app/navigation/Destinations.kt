@@ -11,5 +11,10 @@ enum class Destinations(val route: String){
     Constructors("constructors"),
     Constructor("constructors/{id}"),
     DriversAndTeams("drivers_and_teams"),
-    Profile("profile")
+    Profile("profile"),
+    Race("race/{season}/{round}");
+
+    fun createRaceRoute(season: String, round: Int): String {
+        return "race/$season/$round"
+    }
 }
