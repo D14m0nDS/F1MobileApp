@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,7 +40,9 @@ fun BottomNavBar(navController: NavController) {
     NavigationBar(
         modifier = Modifier
             .height(100.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        containerColor = MaterialTheme.colorScheme.background,
+        contentColor = MaterialTheme.colorScheme.onSurface,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -52,7 +55,7 @@ fun BottomNavBar(navController: NavController) {
                     .weight(1f)
                     .fillMaxHeight()
                     .background(
-                        if (currentRoute == destination.route) Color.Gray.copy(alpha = 0.3f) else Color.Transparent
+                        if (currentRoute == destination.route) MaterialTheme.colorScheme.primaryContainer.copy(0.75f) else Color.Transparent
                     )
                     .clickable(enabled = !isNavigating) {
                         if (!isNavigating) {
@@ -74,11 +77,11 @@ fun BottomNavBar(navController: NavController) {
                     Icon(
                         imageVector = destination.icon,
                         contentDescription = destination.name,
-                        tint = if (currentRoute == destination.route) Color.Black else Color.Gray
+                        tint = if (currentRoute == destination.route) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = destination.label,
-                        color = if (currentRoute == destination.route) Color.Black else Color.Gray
+                        color = if (currentRoute == destination.route) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

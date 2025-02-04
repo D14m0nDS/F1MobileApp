@@ -7,8 +7,10 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -22,12 +24,13 @@ fun TopNavBar(
     screenTitle: String
 ) {
     TopAppBar(
-        title = { Text(screenTitle) },
+        title = { Text(screenTitle, color = MaterialTheme.colorScheme.onSurfaceVariant) },
         navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         },
@@ -36,7 +39,8 @@ fun TopNavBar(
             bottom = dimensionResource(id = R.dimen.size_0dp)
         ),
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
 
     )
 }
