@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -33,6 +34,10 @@ class ApiSingleton @Inject constructor(
     }
 
     private fun createRetrofit(baseUrl: String): Retrofit {
+        val logging = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(
@@ -40,17 +45,33 @@ class ApiSingleton @Inject constructor(
                     .addInterceptor { chain ->
                         authInterceptor.get().intercept(chain)
                     }
+                    .addInterceptor(logging)
                     .build()
             )
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    fun getF1Api(): F1Api = retrofit!!.create(F1Api::class.java)
-    fun getAuthApi(): AuthApi = retrofit!!.create(AuthApi::class.java)
-    fun getBaseUrl(): String = retrofit!!.baseUrl().toString()
+    fun getF1Api(): F1Api {
+        checkInitialization()
+        return retrofit!!.create(F1Api::class.java)
+    }
 
+    fun getAuthApi(): AuthApi {
+        checkInitialization()
+        return retrofit!!.create(AuthApi::class.java)
+    }
 
+    fun getBaseUrl(): String {
+        checkInitialization()
+        return retrofit!!.baseUrl().toString()
+    }
+
+    private fun checkInitialization() {
+        if (retrofit == null) {
+            throw IllegalStateException("API Singleton is not initialized. Call `initialize(baseUrl)` first.")
+        }
+    }
 
     fun getAuthInterceptor(): AuthInterceptor = authInterceptor.get()
 }

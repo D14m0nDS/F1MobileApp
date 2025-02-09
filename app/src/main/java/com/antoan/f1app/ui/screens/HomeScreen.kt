@@ -90,11 +90,17 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize()
 
         ) {
-            Text(
-                text = "Season: ${schedule.season}",
-                modifier = Modifier.padding(16.dp)
-
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Season: ${schedule.season}"
+                )
+            }
+            
             if(schedule.races.isEmpty()) {
                 Text(
                     text = "No races available",

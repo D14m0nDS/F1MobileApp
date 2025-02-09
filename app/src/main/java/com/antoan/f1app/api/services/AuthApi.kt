@@ -6,6 +6,7 @@ import com.antoan.f1app.api.models.RefreshTokenRequest
 import com.antoan.f1app.api.models.RegistrationRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface AuthApi {
@@ -18,4 +19,9 @@ interface AuthApi {
     @POST("auth/refresh")
     suspend fun refreshToken(@Body refreshToken: RefreshTokenRequest): Response<AuthResponse>
 
+    @POST("auth/logout")
+    suspend fun logout(@Header("Authorization") accessToken: String): Response<Unit>
+
+    @POST("auth/logout-refresh")
+    suspend fun logoutRefresh(@Header("Authorization") refreshToken: String): Response<Unit>
 }

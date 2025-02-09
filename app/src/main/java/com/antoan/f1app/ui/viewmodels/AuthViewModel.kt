@@ -1,5 +1,6 @@
 package com.antoan.f1app.ui.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -79,6 +80,8 @@ class AuthViewModel @Inject constructor(
     private fun handleAuthResponse(response: Response<AuthResponse>) {
         if (response.isSuccessful) {
             response.body()?.let {
+                Log.d("AuthViewModel", "Access Token: ${it.accessToken}")
+                Log.d("AuthViewModel", "Refresh Token: ${it.refreshToken}")
                 tokenManager.accessToken = it.accessToken
                 tokenManager.refreshToken = it.refreshToken
                 isLoggedIn.value = true
@@ -96,9 +99,30 @@ class AuthViewModel @Inject constructor(
     }
 
     fun logout() {
-        tokenManager.clearTokens()
-        isLoggedIn.value = false
-        email = ""
-        password = ""
+        viewModelScope.launch {
+            try {
+                val accessToken = tokenManager.accessToken
+                val refreshToken = tokenManager.refreshToken
+                Log.d("AuthViewModel", "Access Token: $accessToken")
+                Log.d("AuthViewModel", "Refresh Token: $refreshToken")
+                if (accessToken != null) {
+                    api.getAuthApi().logout("Bearer ${accessToken.trim()}")
+                }
+
+
+                if (refreshToken != null) {
+                    val formattedToken = "Bearer ${refreshToken.trim()}"
+                    Log.d("AuthViewModel", "Sending Refresh Token: $formattedToken")
+                    api.getAuthApi().logoutRefresh(formattedToken)
+                }
+            } catch (e: Exception) {
+                error = "Logout failed: ${e.message}"
+            } finally {
+                tokenManager.clearTokens()
+                isLoggedIn.value = false
+                email = ""
+                password = ""
+            }
+        }
     }
 }

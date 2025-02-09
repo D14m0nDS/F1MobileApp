@@ -17,16 +17,25 @@ class TokenManager(context: Context) {
 
     var accessToken: String?
         get() = sharedPreferences.getString("access_token", null)
-        set(value) = sharedPreferences.edit().putString("access_token", value).apply()
+        set(value) {
+            if (!value.isNullOrEmpty()) {
+                sharedPreferences.edit().putString("access_token", value).apply()
+            }
+        }
 
     var refreshToken: String?
         get() = sharedPreferences.getString("refresh_token", null)
-        set(value) = sharedPreferences.edit().putString("refresh_token", value).apply()
+        set(value) {
+            if (!value.isNullOrEmpty()) {
+                sharedPreferences.edit().putString("refresh_token", value).apply()
+            }
+        }
 
     fun clearTokens() {
         sharedPreferences.edit().apply {
             remove("access_token")
             remove("refresh_token")
-        }.apply()
+            apply()
+        }
     }
 }

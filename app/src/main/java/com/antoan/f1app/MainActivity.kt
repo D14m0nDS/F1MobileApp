@@ -24,7 +24,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject lateinit var apiSingleton: ApiSingleton
-    private val broadcastListener = BroadcastListener()
+    @Inject lateinit var broadcastListener: BroadcastListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +50,6 @@ class MainActivity : ComponentActivity() {
             lifecycleScope.launch {
                 val baseUrl = "http://$ip:5000/"
                 apiSingleton.initialize(baseUrl)
-                apiSingleton.getAuthInterceptor().setBaseUrl(baseUrl)
             }
         }
     }

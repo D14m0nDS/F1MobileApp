@@ -5,14 +5,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import com.antoan.f1app.ui.components.StandingsNavBar
 import com.antoan.f1app.ui.viewmodels.StandingsViewModel
 
 @Composable
@@ -22,36 +25,23 @@ fun StandingsScreen(
     val driverStandings by viewModel.driverStandings.collectAsState()
     val constructorStandings by viewModel.constructorStandings.collectAsState()
 
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Text(
-            text = "Drivers",
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
-            style = MaterialTheme.typography.headlineMedium.copy(color = Color.White)
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = { 2 })
 
-        )
-        LazyColumn {
-            items(driverStandings) { driver ->
-                Text(
-                    text = driver.name + " " + driver.constructorName + " " + driver.points,
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
-                )
-            }
-        }
-        Text(
-            text = "Constructors",
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
-            style = MaterialTheme.typography.headlineMedium.copy(color = Color.White)
-        )
-        LazyColumn {
-            items(constructorStandings) { constructor ->
-                Text(
-                    text = constructor.name + " " + constructor.points,
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
-                )
-            }
-        }
-    }
+//    Scaffold(
+//        topBar = {
+//            StandingsNavBar(pagerState = pagerState)
+//        }
+//    ) { paddingValues ->
+//        HorizontalPager(
+//            state = pagerState
+//        ) {
+//            LazyColumn(
+//                Modifier
+//                    .fillMaxSize()
+//                    .padding(paddingValues)
+//            ) {
+//              items()
+//            }
+//        }
+//    }
 }

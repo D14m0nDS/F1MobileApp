@@ -1,33 +1,31 @@
 package com.antoan.f1app.api.interceptors
 
-import com.antoan.f1app.api.models.AuthResponse
+import android.util.Log
+import com.antoan.f1app.api.models.RefreshTokenRequest
+import com.antoan.f1app.api.services.AuthApi
 import com.antoan.f1app.network.TokenManager
-import com.google.gson.Gson
 import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.Response
 import javax.inject.Inject
+import kotlinx.coroutines.runBlocking
+
 
 class AuthInterceptor @Inject constructor(
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
+    private val authApi: AuthApi
 ) : Interceptor {
-    private var baseUrl: String? = null
-
-    fun setBaseUrl(url: String) {
-        baseUrl = url
-    }
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
 
+        // Skip authorization for login and registration endpoints
         val path = request.url.encodedPath
-        if (path.startsWith("/auth/login") || path.startsWith("/auth/register")) {
+        if (path.startsWith("/auth/")) {
+            Log.d("AuthInterceptor", "Skipping Authorization for: $path")
             return chain.proceed(request)
         }
 
-        val accessToken = tokenManager.accessToken
-            ?: return chain.proceed(request)
+        val accessToken = tokenManager.accessToken ?: return chain.proceed(request)
 
         val authenticatedRequest = request.newBuilder()
             .header("Authorization", "Bearer $accessToken")
@@ -38,7 +36,7 @@ class AuthInterceptor @Inject constructor(
         // Handle token expiration (401 Unauthorized)
         if (response.code == 401) {
             synchronized(this) {
-                val newToken = refreshToken(tokenManager.refreshToken)
+                val newToken = runBlocking { refreshToken(tokenManager.refreshToken) } // ✅ Use runBlocking
                 newToken?.let {
                     tokenManager.accessToken = it
                     return@intercept chain.proceed(
@@ -54,24 +52,40 @@ class AuthInterceptor @Inject constructor(
         return response
     }
 
-    private fun refreshToken(refreshToken: String?): String? {
-        val tempClient = OkHttpClient.Builder().build()
-        val request = Request.Builder()
-            .url("${baseUrl ?: return null}auth/refresh")
-            .header("Authorization", "Bearer $refreshToken")
-            .build()
-
-        val response = tempClient.newCall(request).execute()
-        return parseToken(response)
-    }
-
-    private fun parseToken(response: Response): String? {
+    private suspend fun refreshToken(refreshToken: String?): String? {
+        if (refreshToken == null) return null
         return try {
-            val json = response.body?.string()
-            val authResponse = Gson().fromJson(json, AuthResponse::class.java)
-            authResponse?.accessToken
+            val response = authApi.refreshToken(RefreshTokenRequest(refreshToken))
+
+            if (response.isSuccessful) {
+                response.body()?.accessToken
+            } else null
         } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
+    }
+
+    suspend fun logout() {
+        val accessToken = tokenManager.accessToken
+        val refreshToken = tokenManager.refreshToken
+
+        if (accessToken != null) {
+            try {
+                authApi.logout("Bearer $accessToken")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        if (refreshToken != null) {
+            try {
+                authApi.logoutRefresh("Bearer $refreshToken")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        tokenManager.clearTokens()
     }
 }

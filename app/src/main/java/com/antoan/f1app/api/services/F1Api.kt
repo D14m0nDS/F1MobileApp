@@ -6,7 +6,6 @@ import com.antoan.f1app.api.models.ConstructorStandings
 import com.antoan.f1app.api.models.Driver
 import com.antoan.f1app.api.models.DriverStandings
 import com.antoan.f1app.api.models.Race
-import com.antoan.f1app.api.models.Schedule
 import retrofit2.http.GET
 import retrofit2.http.Query
 
