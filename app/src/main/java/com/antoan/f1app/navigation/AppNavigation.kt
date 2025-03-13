@@ -111,21 +111,20 @@ fun AppNavigation(
                 // Current standings in the season
                 composable(route = Destinations.Standings.route) {
                     val standingsViewModel : StandingsViewModel = hiltViewModel()
-                    StandingsScreen(standingsViewModel)
+                    StandingsScreen(standingsViewModel, navController)
                 }
 
                 // Driver details
-                composable(route = Destinations.Driver.route) { backStackEntry ->
+                composable(route = Destinations.Driver.route, arguments = listOf(navArgument("id") { type = NavType.StringType })) { backStackEntry ->
                     val driverId = backStackEntry.arguments?.getString("id") ?: "Null"
                     val driverViewModel: DriverScreenViewModel = hiltViewModel()
                     DriverScreen(viewModel = driverViewModel, driverId = driverId)
                 }
 
                 // Constructor details
-                composable(route = Destinations.Constructor.route) { backStackEntry ->
+                composable(route = Destinations.Constructor.route, arguments = listOf(navArgument("id") { type = NavType.StringType })) { backStackEntry ->
                     val constructorId = backStackEntry.arguments?.getString("id") ?: "Null"
                     val constructorViewModel: ConstructorScreenViewModel = hiltViewModel()
-
                     ConstructorScreen(viewModel = constructorViewModel, constructorId = constructorId)
                 }
 
