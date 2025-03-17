@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.core.content.edit
 
 // View model to track the selected theme from user
 @HiltViewModel
@@ -26,7 +27,7 @@ class ThemeViewModel @Inject constructor(
 
     private fun saveThemePreference(isDark: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            sharedPreferences.edit().putBoolean("isDarkTheme", isDark).apply()
+            sharedPreferences.edit() { putBoolean("isDarkTheme", isDark) }
         }
     }
 }

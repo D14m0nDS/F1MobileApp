@@ -147,7 +147,7 @@ fun HomeScreen(
                                 )
 
                                 if (painter.state is AsyncImagePainter.State.Loading) {
-                                    LoadingScreen() // Show your custom loading composable
+                                    LoadingScreen()
                                 }
 
                                 Image(
@@ -159,7 +159,7 @@ fun HomeScreen(
                                 Box(
                                     modifier = Modifier
                                         .fillMaxSize()
-                                        .background(Color.Black.copy(alpha = 0.4f)) // Adjust alpha for tint intensity
+                                        .background(Color.Black.copy(alpha = 0.4f))
                                 )
                                 Text(
                                     text = schedule.races[index].name,

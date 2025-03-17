@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 fun VerticalDivider(
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = DividerAlpha),
-    thickness: Dp = 2.dp
+    thickness: Dp = 1.dp
 ) {
     Box(
         modifier

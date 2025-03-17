@@ -2,6 +2,7 @@ package com.antoan.f1app.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.antoan.f1app.api.ApiSingleton
 import com.antoan.f1app.api.models.ConstructorStandings
 import com.antoan.f1app.api.models.DriverStandings
 import com.antoan.f1app.api.repositories.StandingsRepository
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StandingsViewModel @Inject constructor(
-    private val repository: StandingsRepository
+    private val repository: StandingsRepository,
+    apiSignleton: ApiSingleton
 ) : ViewModel() {
 
     private val _driverStandings = MutableStateFlow<List<DriverStandings>>(emptyList())
@@ -21,6 +23,9 @@ class StandingsViewModel @Inject constructor(
 
     val driverStandings: StateFlow<List<DriverStandings>> = _driverStandings
     val constructorStandings: StateFlow<List<ConstructorStandings>> = _constructorStandings
+
+    val baseUrl: String = apiSignleton.getBaseUrl()
+
 
     init {
         loadStandings()

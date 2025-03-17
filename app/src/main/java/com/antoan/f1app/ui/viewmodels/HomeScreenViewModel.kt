@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val repository: RacesRepository,
-    private val apiSingleton: ApiSingleton
+    apiSingleton: ApiSingleton
 
 ) : ViewModel() {
     private val _schedule = MutableStateFlow<Schedule>(Schedule(0, emptyList()))
