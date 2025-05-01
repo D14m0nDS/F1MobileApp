@@ -19,6 +19,7 @@ import com.antoan.f1app.ui.theme.F1AppTheme
 import com.antoan.f1app.ui.viewmodels.ThemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,12 +46,16 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        broadcastListener.start { ip ->
-            lifecycleScope.launch {
-                val baseUrl = "http://$ip:5000/"
-                apiSingleton.initialize(baseUrl)
-            }
+        lifecycleScope.launch {
+            // replace with your actual dev machine IP and port:
+            apiSingleton.initialize("http://192.168.235.51:5000/")
         }
+
+//        broadcastListener.start { ip ->
+//            lifecycleScope.launch {
+//                val baseUrl = "http://$ip:5000/"
+//                apiSingleton.initialize(baseUrl)
+//            }
+//        }
     }
 }
