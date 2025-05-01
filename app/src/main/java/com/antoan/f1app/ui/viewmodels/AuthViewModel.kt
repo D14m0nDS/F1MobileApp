@@ -13,6 +13,7 @@ import com.antoan.f1app.api.models.RegistrationRequest
 import com.antoan.f1app.network.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -89,35 +90,38 @@ class AuthViewModel @Inject constructor(
                 error = "Invalid server response"
             }
         } else {
-            error = when (response.code()) {
-                400 -> "Invalid request format"
-                401 -> "Invalid credentials"
-                429 -> "Too many attempts - try again later"
-                else -> "Authentication failed (${response.code()})"
+            // grab the raw error body
+            val raw = response.errorBody()?.string().orEmpty()
+
+            // try to pull out the { "message": "…" } field
+            val msg = try {
+                JSONObject(raw).optString("message").takeIf { it.isNotBlank() } ?: raw
+            } catch (e: Exception) {
+                raw
             }
+
+            error = "Error ${response.code()}: $msg"
         }
     }
 
     fun logout() {
         viewModelScope.launch {
             try {
-                val accessToken = tokenManager.accessToken
-                val refreshToken = tokenManager.refreshToken
-                Log.d("AuthViewModel", "Access Token: $accessToken")
-                Log.d("AuthViewModel", "Refresh Token: $refreshToken")
-                if (accessToken != null) {
-                    api.getAuthApi().logout("Bearer ${accessToken.trim()}")
-                }
-
-
-                if (refreshToken != null) {
-                    val formattedToken = "Bearer ${refreshToken.trim()}"
-                    Log.d("AuthViewModel", "Sending Refresh Token: $formattedToken")
-                    api.getAuthApi().logoutRefresh(formattedToken)
+                // grab the refresh token
+                tokenManager.refreshToken?.let { raw ->
+                    val bearer = "Bearer ${raw.trim()}"
+                    val resp = api.getAuthApi().logout(bearer)
+                    if (!resp.isSuccessful) {
+                        // optional: grab server message
+                        val body = resp.errorBody()?.string().orEmpty()
+                        Log.e("AuthVM", "Logout failed ${resp.code()}: $body")
+                    }
                 }
             } catch (e: Exception) {
+                Log.e("AuthVM", "Logout exception", e)
                 error = "Logout failed: ${e.message}"
             } finally {
+                // clear local state in any case
                 tokenManager.clearTokens()
                 isLoggedIn.value = false
                 email = ""

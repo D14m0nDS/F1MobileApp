@@ -4,7 +4,6 @@ import android.content.Context
 import com.antoan.f1app.api.ApiSingleton
 import com.antoan.f1app.api.interceptors.AuthInterceptor
 import com.antoan.f1app.api.services.AuthApi
-import com.antoan.f1app.network.BroadcastListener
 import com.antoan.f1app.network.TokenManager
 import dagger.Module
 import dagger.Provides
@@ -43,12 +42,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideBroadcastListener(apiSingleton: ApiSingleton): BroadcastListener {
-        return BroadcastListener(apiSingleton)
-    }
-
-    @Provides
-    @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi {
         return retrofit.create(AuthApi::class.java)
     }
@@ -57,7 +50,7 @@ object AppModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://localhost:5000/")
+            .baseUrl("https://flask-backend-252148344516.europe-west3.run.app")
             .client(OkHttpClient.Builder().build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

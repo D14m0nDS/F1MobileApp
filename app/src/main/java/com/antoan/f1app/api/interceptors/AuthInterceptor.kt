@@ -67,25 +67,15 @@ class AuthInterceptor @Inject constructor(
     }
 
     suspend fun logout() {
-        val accessToken = tokenManager.accessToken
         val refreshToken = tokenManager.refreshToken
-
-        if (accessToken != null) {
-            try {
-                authApi.logout("Bearer $accessToken")
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
 
         if (refreshToken != null) {
             try {
-                authApi.logoutRefresh("Bearer $refreshToken")
+                authApi.logout("Bearer $refreshToken")
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
-
         tokenManager.clearTokens()
     }
 }
