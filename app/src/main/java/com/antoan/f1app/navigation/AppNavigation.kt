@@ -94,7 +94,7 @@ fun AppNavigation(
                     val round = backStackEntry.arguments?.getInt("round") ?: 1
 
                     val raceScreenViewModel: RaceScreenViewModel = hiltViewModel()
-                    RaceScreen(viewModel = raceScreenViewModel, season = season, round = round, navController = navController)
+                    RaceScreen(viewModel = raceScreenViewModel, season = season, round = round, onBack = { navController.popBackStack() })
                 }
                 // Drivers and constructors list
                 composable(route = BottomNavDestinations.DriversAndTeams.route) {
@@ -111,38 +111,38 @@ fun AppNavigation(
                 // Current standings in the season
                 composable(route = Destinations.Standings.route) {
                     val standingsViewModel : StandingsViewModel = hiltViewModel()
-                    StandingsScreen(standingsViewModel, navController)
+                    StandingsScreen(viewModel = standingsViewModel, navController = navController)
                 }
 
                 // Driver details
                 composable(route = Destinations.Driver.route, arguments = listOf(navArgument("id") { type = NavType.StringType })) { backStackEntry ->
                     val driverId = backStackEntry.arguments?.getString("id") ?: "Null"
                     val driverViewModel: DriverScreenViewModel = hiltViewModel()
-                    DriverScreen(viewModel = driverViewModel, driverId = driverId)
+                    DriverScreen(viewModel = driverViewModel, driverId = driverId, onBack = { navController.popBackStack() })
                 }
 
                 // Constructor details
                 composable(route = Destinations.Constructor.route, arguments = listOf(navArgument("id") { type = NavType.StringType })) { backStackEntry ->
                     val constructorId = backStackEntry.arguments?.getString("id") ?: "Null"
                     val constructorViewModel: ConstructorScreenViewModel = hiltViewModel()
-                    ConstructorScreen(viewModel = constructorViewModel, constructorId = constructorId)
+                    ConstructorScreen(viewModel = constructorViewModel, constructorId = constructorId, onBack = { navController.popBackStack() })
                 }
 
                 // User profile
                 composable(route = BottomNavDestinations.Profile.route) {
-                    ProfileScreen(themeViewModel, authViewModel)
+                    ProfileScreen(themeViewModel = themeViewModel, authViewModel = authViewModel)
                 }
 
                 // All drivers list, redirected from DriversAndTeamsScreen()
                 composable(route = Destinations.Drivers.route) {
                     val allDriversViewModel: AllDriversViewModel = hiltViewModel()
-                    AllDriversScreen(allDriversViewModel, navController)
+                    AllDriversScreen(viewModel = allDriversViewModel, onBack = { navController.popBackStack() })
                 }
 
                 // All constructors list, redirected from DriversAndTeamsScreen()
                composable(route = Destinations.Constructors.route) {
                     val allConstructorsViewModel: AllConstructorsViewModel = hiltViewModel()
-                    AllConstructorsScreen(allConstructorsViewModel, navController)
+                    AllConstructorsScreen(viewModel = allConstructorsViewModel, onBack = { navController.popBackStack() })
                }
             }
         }

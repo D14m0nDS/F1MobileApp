@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StandingsViewModel @Inject constructor(
     private val repository: StandingsRepository,
-    apiSignleton: ApiSingleton
+    apiSingleton: ApiSingleton
 ) : ViewModel() {
 
     private val _driverStandings = MutableStateFlow<List<DriverStandings>>(emptyList())
@@ -24,7 +24,7 @@ class StandingsViewModel @Inject constructor(
     val driverStandings: StateFlow<List<DriverStandings>> = _driverStandings
     val constructorStandings: StateFlow<List<ConstructorStandings>> = _constructorStandings
 
-    val baseUrl: String = apiSignleton.getBaseUrl()
+    val baseUrl: String = apiSingleton.getBaseUrl()
 
 
     init {

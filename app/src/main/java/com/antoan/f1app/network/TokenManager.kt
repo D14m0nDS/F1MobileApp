@@ -3,6 +3,7 @@ package com.antoan.f1app.network
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import androidx.core.content.edit
 
 class TokenManager(context: Context) {
     private val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
@@ -19,7 +20,7 @@ class TokenManager(context: Context) {
         get() = sharedPreferences.getString("access_token", null)
         set(value) {
             if (!value.isNullOrEmpty()) {
-                sharedPreferences.edit().putString("access_token", value).apply()
+                sharedPreferences.edit() { putString("access_token", value) }
             }
         }
 
@@ -27,7 +28,7 @@ class TokenManager(context: Context) {
         get() = sharedPreferences.getString("refresh_token", null)
         set(value) {
             if (!value.isNullOrEmpty()) {
-                sharedPreferences.edit().putString("refresh_token", value).apply()
+                sharedPreferences.edit() { putString("refresh_token", value) }
             }
         }
 

@@ -14,19 +14,18 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.navigation.NavController
 import com.antoan.f1app.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopNavBar(
-    navController: NavController,
+    onBack: () -> Unit,
     screenTitle: String
 ) {
     TopAppBar(
         title = { Text(screenTitle, color = MaterialTheme.colorScheme.onSurfaceVariant) },
         navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
+            IconButton(onClick = onBack) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",

@@ -25,7 +25,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.antoan.f1app.api.models.DriverStandings
 import com.antoan.f1app.navigation.Destinations
@@ -62,10 +61,6 @@ fun DriverStandingsList(driverStandings: List<DriverStandings>, navController: N
 
             val painter = rememberAsyncImagePainter(model = imageUrl)
 
-
-            if (painter.state is AsyncImagePainter.State.Loading) {
-                LoadingScreen()
-            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

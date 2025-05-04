@@ -15,23 +15,22 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.antoan.f1app.ui.components.LoadingScreen
 import com.antoan.f1app.ui.components.TopNavBar
 import com.antoan.f1app.ui.viewmodels.RaceScreenViewModel
 import com.antoan.f1app.api.models.Result
-
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 
 @Composable
 fun RaceScreen(
     viewModel: RaceScreenViewModel,
     season: String,
     round: Int,
-    navController: NavController
+    onBack: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
         viewModel.loadRaceInfo(season, round)
@@ -42,7 +41,7 @@ fun RaceScreen(
 
     Scaffold(
         topBar = {
-            TopNavBar(navController, race.name)
+            TopNavBar(onBack, race.name)
         }
     ) { innerPadding ->
         Box(
@@ -87,7 +86,7 @@ fun ResultCard(result: Result) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Position: ${result.position.toInt()} - Driver: ${result.driverName} (${result.constructorName})", style = MaterialTheme.typography.bodyLarge)
-            Text(text = "Time: ${result.time ?: "N/A"}")
+            Text(text = "Time: ${result.time}")
             Text(text = "Points: ${result.points.toInt()} - Status: ${result.status}")
         }
     }

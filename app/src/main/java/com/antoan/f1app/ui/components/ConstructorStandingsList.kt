@@ -3,7 +3,6 @@ package com.antoan.f1app.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,8 +13,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,7 +24,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.antoan.f1app.api.models.ConstructorStandings
 import com.antoan.f1app.navigation.Destinations
@@ -62,11 +58,6 @@ fun ConstructorStandingsList(constructorStandings: List<ConstructorStandings>, n
             }
 
             val painter = rememberAsyncImagePainter(model = imageUrl)
-
-
-            if (painter.state is AsyncImagePainter.State.Loading) {
-                LoadingScreen()
-            }
 
             Box(
                 modifier = Modifier
