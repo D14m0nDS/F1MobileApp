@@ -38,11 +38,10 @@ import com.antoan.f1app.ui.viewmodels.StandingsViewModel
 // App navigation through all screens
 @Composable
 fun AppNavigation(
-    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
     val themeViewModel: ThemeViewModel = hiltViewModel()
-    val authViewModel: AuthViewModel = hiltViewModel() // We need to change this to someting like authViewModel
+    val authViewModel: AuthViewModel = hiltViewModel() // We need to change this to something like authViewModel
     val isLoggedIn = authViewModel.isLoggedIn.value
     //A box filling the screen, for cleaner look
     Box(
@@ -60,7 +59,7 @@ fun AppNavigation(
             NavHost(
                 navController = navController,
                 startDestination = startDestination,
-                modifier = modifier.padding(paddingValues)
+                modifier = Modifier.padding(paddingValues)
             ) {
                 // Login screen
                 composable(route = Destinations.Login.route) {

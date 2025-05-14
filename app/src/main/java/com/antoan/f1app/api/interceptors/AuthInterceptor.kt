@@ -36,7 +36,7 @@ class AuthInterceptor @Inject constructor(
         // Handle token expiration (401 Unauthorized)
         if (response.code == 401) {
             synchronized(this) {
-                val newToken = runBlocking { refreshToken(tokenManager.refreshToken) } // ✅ Use runBlocking
+                val newToken = runBlocking { refreshToken(tokenManager.refreshToken) }
                 newToken?.let {
                     tokenManager.accessToken = it
                     return@intercept chain.proceed(
