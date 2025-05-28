@@ -8,15 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.antoan.f1app.ui.components.ConstructorStandingsList
 import com.antoan.f1app.ui.components.DriverStandingsList
 import com.antoan.f1app.ui.components.StandingsNavBar
 import com.antoan.f1app.ui.viewmodels.StandingsViewModel
+import com.antoan.f1app.ui.components.StandingsSkeleton
 
 @Composable
 fun StandingsScreen(viewModel: StandingsViewModel, navController: NavController) {
+    val isLoading by viewModel.isLoading.collectAsState()
     val driverStandings by viewModel.driverStandings.collectAsState()
     val constructorStandings by viewModel.constructorStandings.collectAsState()
 
@@ -27,24 +28,29 @@ fun StandingsScreen(viewModel: StandingsViewModel, navController: NavController)
             StandingsNavBar(pagerState = pagerState)
         }
     ) { paddingValues ->
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier
-                .padding((paddingValues))
-                .padding(bottom = 0.dp)
-
-        ) { page ->
-            when (page) {
-                0 -> DriverStandingsList(
-                    driverStandings = driverStandings,
-                    navController = navController,
-                    viewModel = viewModel
-                )
-                1 -> ConstructorStandingsList(
-                    constructorStandings = constructorStandings,
-                    navController = navController,
-                    viewModel = viewModel
-                )
+        if (isLoading) {
+            StandingsSkeleton(
+                pagerState = pagerState,
+                modifier = Modifier.padding(paddingValues)
+            )
+        } else {
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.padding(paddingValues)
+            ) { page ->
+                if (page == 0) {
+                    DriverStandingsList(
+                        driverStandings = driverStandings,
+                        navController = navController,
+                        viewModel = viewModel
+                    )
+                } else {
+                    ConstructorStandingsList(
+                        constructorStandings = constructorStandings,
+                        navController = navController,
+                        viewModel = viewModel
+                    )
+                }
             }
         }
     }

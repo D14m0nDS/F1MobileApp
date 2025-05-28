@@ -83,6 +83,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.coil)
     implementation(libs.loggingInterceptor)
+    implementation(libs.accompanist.placeholder.material)
     kapt(libs.hilt.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
