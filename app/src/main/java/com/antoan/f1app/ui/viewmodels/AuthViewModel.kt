@@ -80,26 +80,20 @@ class AuthViewModel @Inject constructor(
 
     private fun handleAuthResponse(response: Response<AuthResponse>) {
         if (response.isSuccessful) {
-            response.body()?.let {
-                Log.d("AuthViewModel", "Access Token: ${it.accessToken}")
-                Log.d("AuthViewModel", "Refresh Token: ${it.refreshToken}")
-                tokenManager.accessToken = it.accessToken
-                tokenManager.refreshToken = it.refreshToken
+            response.body()?.let { auth ->
+                tokenManager.accessToken = auth.accessToken
+                tokenManager.refreshToken = auth.refreshToken
                 isLoggedIn.value = true
             } ?: run {
                 error = "Invalid server response"
             }
         } else {
-            // grab the raw error body
             val raw = response.errorBody()?.string().orEmpty()
-
-            // try to pull out the { "message": "…" } field
             val msg = try {
                 JSONObject(raw).optString("message").takeIf { it.isNotBlank() } ?: raw
             } catch (e: Exception) {
                 raw
             }
-
             error = "Error ${response.code()}: $msg"
         }
     }
