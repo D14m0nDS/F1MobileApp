@@ -24,6 +24,9 @@ class StandingsViewModel @Inject constructor(
     val driverStandings: StateFlow<List<DriverStandings>> = _driverStandings
     val constructorStandings: StateFlow<List<ConstructorStandings>> = _constructorStandings
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     val baseUrl: String = apiSingleton.getBaseUrl()
 
 
@@ -33,8 +36,12 @@ class StandingsViewModel @Inject constructor(
 
     private fun loadStandings() {
         viewModelScope.launch {
+            _isLoading.value = true
+
             _driverStandings.value = repository.getDriverStandings()
             _constructorStandings.value = repository.getConstructorStandings()
+
+            _isLoading.value = false
         }
     }
 }
