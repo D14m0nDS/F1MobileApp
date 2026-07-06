@@ -1,9 +1,9 @@
 [versions]
-agp = "8.8.2"
+agp = "9.2.1"
 #gradle = "14.0.0"
 hiltAndroid = "2.49"
 hiltNavigationCompose = "1.2.0"
-kotlin = "1.9.21"
+kotlin = "2.2.10"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 espressoCore = "3.6.1"
@@ -53,4 +53,5 @@ accompanist-placeholder-material = { group = "com.google.accompanist", name = "a
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
