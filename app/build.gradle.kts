@@ -1,19 +1,18 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt.android)
-    id("kotlin-kapt")
+    alias(libs.plugins.legacy.kapt)
     alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.antoan.f1app"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.antoan.f1app"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -39,9 +38,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
     buildFeatures {
         compose = true
     }
@@ -50,15 +46,15 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    hilt {
-        enableAggregatingTask = true
-    }
-    @Suppress("UnstableApiUsage")
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
         }
     }
+}
+
+hilt {
+    enableAggregatingTask = true
 }
 
 dependencies {
@@ -83,7 +79,6 @@ dependencies {
     implementation(libs.loggingInterceptor)
     implementation(libs.accompanist.placeholder.material)
     kapt(libs.hilt.compiler)
-    testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
     testImplementation(libs.okio)
