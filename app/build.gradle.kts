@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.androidx.security.crypto)
     testImplementation(libs.junit)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
     implementation(libs.hilt.android)
     implementation(libs.coil)
     implementation(libs.loggingInterceptor)
