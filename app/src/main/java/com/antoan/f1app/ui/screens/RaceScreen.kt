@@ -2,7 +2,7 @@ package com.antoan.f1app.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -13,56 +13,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.antoan.f1app.ui.components.RaceHeader
 import com.antoan.f1app.ui.components.ResultItem
+import com.antoan.f1app.ui.components.formatResultDisplayText
 import com.antoan.f1app.ui.components.TopNavBar
 import com.antoan.f1app.ui.components.LoadingScreen
 import com.antoan.f1app.ui.viewmodels.RaceScreenViewModel
-
-private fun parseRaceTimeMs(raw: String?): Long? {
-    if (raw.isNullOrBlank()) return null
-
-    val parts = raw
-        .substringAfter("days")
-        .trim()
-        .split('.', limit = 2)
-
-    val hmsPart  = parts.getOrNull(0) ?: return null
-    val fracPart = parts.getOrNull(1)?.take(3).orEmpty()
-
-    val timePieces = hmsPart.split(':').mapNotNull { it.toLongOrNull() }
-    if (timePieces.size != 3) return null
-
-    val (h, m, s) = timePieces
-    val fracMs    = fracPart.padEnd(3, '0').toLong()
-    return h * 3_600_000 +
-            m *   60_000 +
-            s *    1_000 +
-            fracMs
-}
-
-private fun formatWinner(ms: Long): String {
-    val h    = ms / 3_600_000
-    val m    = (ms % 3_600_000) / 60_000
-    val s    = (ms %    60_000) / 1_000
-    val frac = ms % 1_000
-
-    return if (h > 0) {
-        "%d:%02d:%02d.%03d".format(h, m, s, frac)
-    } else {
-        "%02d:%02d.%03d".format(m, s, frac)
-    }
-}
-
-private fun formatDelta(deltaMs: Long): String {
-    val m    = deltaMs / 60_000
-    val s    = (deltaMs % 60_000) / 1_000
-    val frac = deltaMs % 1_000
-
-    return if (m > 0) {
-        "+%d:%02d.%03d".format(m, s, frac)
-    } else {
-        "+%d.%03d".format(s, frac)
-    }
-}
 
 @Composable
 fun RaceScreen(
@@ -125,19 +79,11 @@ fun RaceScreen(
                 )
             }
 
-            itemsIndexed(race.results) { idx, result ->
-                val ms = parseRaceTimeMs(result.time)
-
-                val displayTime = when {
-                    idx == 0 && ms != null ->
-                        formatWinner(ms)
-
-                    ms == null ->
-                        result.status
-
-                    else ->
-                        formatDelta(ms) + "s"
-                }
+            items(race.results) { result ->
+                val displayTime = formatResultDisplayText(
+                    result = result,
+                    showWinnerTotalTime = result.position == 1f
+                )
 
                 ResultItem(
                     result      = result,

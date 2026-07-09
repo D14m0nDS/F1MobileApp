@@ -2,6 +2,7 @@ package com.antoan.f1app.api.repositories
 
 import com.antoan.f1app.api.ApiSingleton
 import com.antoan.f1app.api.models.Constructor
+import com.antoan.f1app.api.models.ConstructorInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -25,14 +26,14 @@ class ConstructorsRepository @Inject constructor(
         }
     }
 
-    suspend fun getConstructor(id: String): Constructor {
+    suspend fun getConstructor(id: String): ConstructorInfo {
         return withContext(Dispatchers.IO) {
             apiSingleton.isInitialized.first { it }
 
             try {
                 apiSingleton.getF1Api().getConstructorInfo(id)
             } catch (e: Exception) {
-                Constructor()
+                ConstructorInfo()
             }
         }
     }

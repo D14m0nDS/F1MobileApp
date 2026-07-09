@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(Unit) {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    apiSingleton.initialize("https://flask-backend-252148344516.europe-west3.run.app")
+                    apiSingleton.initialize("http://192.168.1.2:8080/")
                 }
             }
 

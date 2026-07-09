@@ -2,6 +2,7 @@ package com.antoan.f1app.api.services
 
 import ScheduleResponse
 import com.antoan.f1app.api.models.Constructor
+import com.antoan.f1app.api.models.ConstructorInfo
 import com.antoan.f1app.api.models.ConstructorStandings
 import com.antoan.f1app.api.models.Driver
 import com.antoan.f1app.api.models.DriverStandings
@@ -37,7 +38,7 @@ interface F1Api {
     @GET("f1/constructor")
     suspend fun getConstructorInfo(
         @Query("id") id: String
-    ): Constructor
+    ): ConstructorInfo
 
     @GET("f1/drivers")
     suspend fun getAllDrivers(

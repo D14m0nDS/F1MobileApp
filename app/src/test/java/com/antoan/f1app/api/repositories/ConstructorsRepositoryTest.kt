@@ -2,6 +2,7 @@ package com.antoan.f1app.api.repositories
 
 import com.antoan.f1app.api.ApiSingleton
 import com.antoan.f1app.api.models.Constructor
+import com.antoan.f1app.api.models.ConstructorInfo
 import com.antoan.f1app.api.services.F1Api
 import io.mockk.every
 import io.mockk.coEvery
@@ -42,7 +43,7 @@ class ConstructorsRepositoryTest {
 
     @Test
     fun `getConstructor returns object when API succeeds`() = runTest {
-        val cons = Constructor("idX","NameX","NatX", listOf("d1","d2"), 12.5f)
+        val cons = ConstructorInfo("idX","NameX","NatX", emptyList(), 12.5f, emptyList())
         coEvery { fakeApi.getConstructorInfo("idX") } returns cons
 
         val result = repo.getConstructor("idX")
@@ -54,6 +55,6 @@ class ConstructorsRepositoryTest {
         coEvery { fakeApi.getConstructorInfo(any()) } throws RuntimeException("error")
 
         val result = repo.getConstructor("foo")
-        assertEquals(Constructor(), result)
+        assertEquals(ConstructorInfo(), result)
     }
 }

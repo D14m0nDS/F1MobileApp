@@ -16,7 +16,7 @@ data class Result(
     @SerializedName("constructor_name")
     val constructorName: String,
     @SerializedName("time")
-    val time: String,
+    val time: String?,
     @SerializedName("points")
     val points: Float,
     @SerializedName("status")
