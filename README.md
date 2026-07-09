@@ -29,4 +29,4 @@ This is an Android application built with Kotlin and Jetpack Compose to provide 
 
 ## Demo
 
-
+https://github.com/user-attachments/assets/7f31c63b-feaa-4ef3-b55b-09f5515f9c1d
